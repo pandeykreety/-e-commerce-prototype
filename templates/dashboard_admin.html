@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- ADMINISTRATOR DASHBOARD: High-privilege auditing layer rendering logs & roles -->
+<div class="dashboard-header">
+    <h1>System Administration</h1>
+    <p style="color:var(--text-muted); font-size:1.125rem;">Global control center for user management and secure system auditing.</p>
+</div>
+
+<div class="dashboard-section">
+    <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        User Directory & Access Control
+    </h2>
+    <!-- GLOBAL USER DIRECTORY: Exposes raw database artifacts strictly explicitly to root level RBAC -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Security Signature (Salted Hash)</th>
+                    <th>Joined</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td style="font-family:monospace; color:var(--text-muted);">#USR-{{ user.id }}</td>
+                    <td style="font-weight:700; color:var(--primary);">{{ user.username }}</td>
+                    <td style="color:var(--text-muted);">{{ user.email }}</td>
+                    <td>
+                        {% if user.role == 'admin' %}
+                        <span class="badge" style="background:#fee2e2; color:#b91c1c;">Admin Account</span>
+                        {% elif user.role == 'seller' %}
+                        <span class="badge" style="background:#ecfdf5; color:#065f46;">Verified Seller</span>
+                        {% else %}
+                        <span class="badge" style="background:#f1f5f9; color:#475569;">Platform Buyer</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-family:monospace; font-size:0.65rem; color:var(--text-muted); max-width:150px; overflow:hidden; text-overflow:ellipsis;" title="{{ user.password_hash }}">
+                        {{ user.password_hash[:20] }}...
+                    </td>
+                    <td style="font-size:0.75rem; color:var(--text-muted);">{{ user.created_at }}</td>
+                    <td>
+                        <!-- PRIVILEGE ESCALATION UTILITY: Strict POST form allows admins to manually alter RBAC levels -->
+                        {% if user.role == 'buyer' %}
+                        <form action="{{ url_for('promote_seller', user_id=user.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Promote user to Seller? This grants product management rights.');">Promote Role</button>
+                        </form>
+                        {% else %}
+                        <span style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">No Actions Available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        Audit Trail & Security Logs
+    </h2>
+    <div class="table-container" style="max-height:500px; overflow-y:auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Log Reference</th>
+                    <th>Event Timestamp</th>
+                    <th>Origin Activity</th>
+                    <th>Security Signature</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td style="font-family:monospace; color:var(--text-muted);">#AUDIT-{{ log.id }}</td>
+                    <td style="font-size:0.75rem;">{{ log.timestamp }}</td>
+                    <td><strong>@{{ log.username }}</strong></td>
+                    <td>
+                        {% if 'FAILED' in log.login_attempt %}
+                        <span style="color:var(--danger); font-weight:700;">{{ log.login_attempt }}</span>
+                        {% elif 'SUCCESS' in log.login_attempt %}
+                        <span style="color:var(--accent); font-weight:700;">{{ log.login_attempt }}</span>
+                        {% else %}
+                        <span style="color:var(--text-muted);">{{ log.login_attempt }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

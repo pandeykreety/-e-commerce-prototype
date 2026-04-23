@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- PUBLIC STOREFRONT: Landing page directing users to identity verification endpoints -->
+<div class="hero-section" style="background:var(--primary); color:white; padding:4rem 2rem; border-radius:12px; margin-bottom:3rem; text-align:center; box-shadow:var(--shadow-lg);">
+    <h1 style="font-size:3rem; font-weight:800; letter-spacing:-0.05em; margin-bottom:1rem;">Welcome to SecureShop Pro</h1>
+    <p style="font-size:1.25rem; color:#cbd5e1; max-width:600px; margin:0 auto 2rem;">The premium, military-grade secure marketplace. Register an account today to discover authenticated products and authentic sellers.</p>
+    <div style="display:flex; gap:1rem; justify-content:center;">
+        <a href="{{ url_for('register') }}" class="btn btn-success" style="padding:1rem 2rem; font-size:1.125rem;">Start Shopping Safely</a>
+        <a href="{{ url_for('login') }}" class="btn" style="background:transparent; border:2px solid white; padding:1rem 2rem; font-size:1.125rem;">Seller Portal</a>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h2 style="text-align:center; margin-bottom:2rem;">Why Choose SecureShop Pro?</h2>
+    <!-- MARKETING & EDUCATION: Clearly lists the cyber defenses in place to build trust -->
+    <div class="grid" style="grid-template-columns: repeat(3, 1fr); text-align:center;">
+        <div class="feature-card" style="padding:2rem;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <h3 style="font-size:1.25rem; margin-bottom:0.5rem;">Bank-Level Security</h3>
+            <p style="color:var(--text-muted);">Military-grade bcrypt hashing with multi-factor authentication standard on every account.</p>
+        </div>
+        <div class="feature-card" style="padding:2rem;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <h3 style="font-size:1.25rem; margin-bottom:0.5rem;">Real-Time Protection</h3>
+            <p style="color:var(--text-muted);">Dynamic CAPTCHA systems and rate-limiting to block brute-force bots and hackers.</p>
+        </div>
+        <div class="feature-card" style="padding:2rem;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            <h3 style="font-size:1.25rem; margin-bottom:0.5rem;">Authentic Goods</h3>
+            <p style="color:var(--text-muted);">Strictly vetted seller directory to guarantee authentic products and seamless fulfillment.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
